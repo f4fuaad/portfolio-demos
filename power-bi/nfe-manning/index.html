@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NFE Start-Up Vendor Manning Dashboard</title>
+<style>
+  :root{
+    --bg:#F5F7FA; --card:#ffffff; --ink:#1F2937; --muted:#6B7280; --line:#E5E7EB;
+    --blue:#2563EB; --amber:#F59E0B; --red:#DC2626; --grey:#6B7280; --green:#059669;
+    --shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;line-height:1.45}
+  header{background:#fff;border-bottom:1px solid var(--line);padding:18px 24px 14px}
+  header h1{margin:0;font-size:22px;letter-spacing:.2px}
+  header p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  .wrap{max-width:1360px;margin:0 auto;padding:16px 24px 32px}
+  .banner{background:#FFFBEB;border:1px solid #FDE68A;border-left:5px solid var(--amber);border-radius:8px;padding:14px 16px;margin:0 0 16px}
+  .banner h2{margin:0 0 6px;font-size:15px;color:#92400E}
+  .banner p{margin:4px 0;color:#78350F;font-size:13px}
+  .banner ul{margin:6px 0 0;padding-left:18px;color:#78350F;font-size:13px}
+  .kpis{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-bottom:16px}
+  .kpi{background:var(--card);border-radius:10px;box-shadow:var(--shadow);padding:14px 16px;border-top:4px solid var(--blue)}
+  .kpi .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  .kpi .val{font-size:30px;font-weight:700;margin:4px 0 2px}
+  .kpi .sub{font-size:12px;color:var(--muted)}
+  .kpi.k-blue{border-top-color:var(--blue)} .kpi.k-amber{border-top-color:var(--amber)}
+  .kpi.k-red{border-top-color:var(--red)} .kpi.k-grey{border-top-color:var(--grey)}
+  .kpi.k-green{border-top-color:var(--green)}
+  .layout{display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:start}
+  aside{background:var(--card);border-radius:10px;box-shadow:var(--shadow);padding:14px 16px;position:sticky;top:12px}
+  aside h2{margin:0 0 10px;font-size:14px}
+  aside label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.4px}
+  aside select,aside input{width:100%;padding:7px 8px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;background:#fff;color:var(--ink)}
+  aside button{margin-top:16px;width:100%;padding:8px;border:0;border-radius:6px;background:var(--blue);color:#fff;font-weight:600;cursor:pointer}
+  aside button:hover{background:#1D4ED8}
+  aside .note{font-size:12px;color:var(--muted);margin-top:12px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:var(--card);border-radius:10px;box-shadow:var(--shadow);padding:16px 18px}
+  .card.wide{grid-column:1 / -1}
+  .card h3{margin:0 0 4px;font-size:15px}
+  .card .hint{font-size:12px;color:var(--muted);margin:0 0 10px}
+  .empty{background:#F9FAFB;border:1px dashed #D1D5DB;border-radius:8px;padding:14px;text-align:center;color:var(--muted);font-size:13px}
+  .legend{font-size:12px;color:var(--muted);margin-top:8px}
+  .legend span{display:inline-block;margin-right:12px}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--line);padding:8px 6px}
+  td{border-bottom:1px solid var(--line);padding:8px 6px;vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  footer{margin-top:20px;font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  footer h3{margin:0 0 6px;font-size:13px;color:var(--ink)}
+  footer ul{margin:6px 0;padding-left:18px}
+  @media (max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr}aside{position:static}}
+</style>
+</head>
+<body>
+<header>
+  <h1>NFE Start-Up Vendor Manning Dashboard</h1>
+  <p>Requisition <strong>NFE1-CTJV-ME-REQ-21317</strong> &middot; ROTARY SCREW PUMPS &middot; Issuer SVRC &middot; Rev 0 &middot; 15 Mar 2023 &middot; Source: &ldquo;NFE - VENDOR Manning Chart-Template.xlsm&rdquo;, sheet <em>Manning Chart</em> &middot; &ldquo;Date actual&rdquo; in file: <strong>15 Nov 2026</strong> (used as TODAY) &middot; Weekend: Friday (Qatar)</p>
+</header>
+<div class="wrap">
+
+  <div class="banner">
+    <h2>&#9888; Data coverage &mdash; this file is a stripped template, not the live manning chart</h2>
+    <p>Only <strong>2 positions</strong> are in this file (VS-21317-P001 and VS-21317-P002), each with 3 plan rows (Base Plan / Estimated / Actual). On the <strong>Actual rows</strong> &mdash; the rows every KPI is built from &mdash; the name, Mobilization Status, Priority, Status, Travel Status, Start Mob, End Mob and Closed fields are all <strong>blank</strong>, and all Actual man-days are <strong>0</strong>. That is why most KPIs below read 0. This is a property of the template file, not a calculation error.</p>
+    <ul>
+      <li>Only dated rows are the two Base Plan rows: 1 Mar 2023 &ndash; 20 Mar 2023 (17 man-days each, 34 total, Mar 2023 only).</li>
+      <li>Discipline Requestor is blank on every row; Vendor is the placeholder value &ldquo;a&rdquo; on every row.</li>
+      <li>The dashboard logic, slicers and DAX/Power Query in the build pack are fully wired: dropping in the full live Manning Chart (same layout, headers row 13) will populate every KPI, chart and table.</li>
+    </ul>
+  </div>
+
+  <!-- KPI CARDS : Actual rows only, unless a chart compares plans -->
+  <section class="kpis" id="kpis" aria-label="Key performance indicators">
+    <div class="kpi k-blue"><div class="lbl">Total Manpower</div><div class="val" id="kpi-total" data-kpi="total-manpower">2</div><div class="sub">Actual rows only</div></div>
+    <div class="kpi k-blue"><div class="lbl">Total Mobilized</div><div class="val" id="kpi-mobilized" data-kpi="total-mobilized">0</div><div class="sub">Mobilization Status = Mobilized</div></div>
+    <div class="kpi k-amber"><div class="lbl">Under Mobilization</div><div class="val" id="kpi-undermob" data-kpi="under-mobilization">0</div><div class="sub">Mobilization Status = Under Mob</div></div>
+    <div class="kpi k-grey"><div class="lbl">Closed</div><div class="val" id="kpi-closed" data-kpi="closed">0</div><div class="sub">Closed field set</div></div>
+    <div class="kpi k-red"><div class="lbl">Suspended</div><div class="val" id="kpi-suspended" data-kpi="suspended">0</div><div class="sub">Mobilization Status = Suspended</div></div>
+    <div class="kpi k-green"><div class="lbl">Mobilization %</div><div class="val" id="kpi-mobpct" data-kpi="mobilization-pct">0%</div><div class="sub">Mobilized / Total Manpower</div></div>
+    <div class="kpi k-blue"><div class="lbl">On Site Today</div><div class="val" id="kpi-onsite" data-kpi="on-site-today">0</div><div class="sub">Start Mob &le; 15 Nov 2026 &le; End Mob</div></div>
+  </section>
+
+  <div class="layout">
+    <aside aria-label="Slicers">
+      <h2>Slicers</h2>
+      <label for="f-vendor">Vendor</label>
+      <select id="f-vendor"></select>
+      <label for="f-area">Area</label>
+      <select id="f-area"></select>
+      <label for="f-disc">Discipline Requestor</label>
+      <select id="f-disc"></select>
+      <label for="f-mob">Mobilization Status</label>
+      <select id="f-mob"></select>
+      <label for="f-priority">Priority</label>
+      <select id="f-priority"></select>
+      <label for="f-status">Status</label>
+      <select id="f-status"></select>
+      <label for="f-from">Start Mob from</label>
+      <input type="date" id="f-from">
+      <label for="f-to">Start Mob to</label>
+      <input type="date" id="f-to">
+      <button type="button" id="reset">Reset slicers</button>
+      <p class="note">Slicers filter the KPI cards, bars, donut and tables live. The date range filters on Start Mob and also bounds the trend charts. Actual rows in this template carry no Start Mob dates, so setting a date range excludes them (Power BI behaves the same way with blank dates) &mdash; use Reset to clear it.</p>
+      <p class="note" id="filter-note"></p>
+    </aside>
+
+    <main class="grid">
+      <div class="card">
+        <h3>Mobilization Status split</h3>
+        <p class="hint">Actual rows only. Blank status is shown as &ldquo;Not recorded&rdquo; &mdash; it is not counted as Mobilized.</p>
+        <div id="donut"></div>
+        <div class="legend" id="donut-legend"></div>
+      </div>
+
+      <div class="card">
+        <h3>Manpower by Vendor (top 10)</h3>
+        <p class="hint">Actual rows only.</p>
+        <div id="bar-vendor"></div>
+      </div>
+
+      <div class="card">
+        <h3>Manpower by Discipline Requestor</h3>
+        <p class="hint">Actual rows only. Discipline Requestor is blank on every row in this template.</p>
+        <div id="bar-disc"></div>
+      </div>
+
+      <div class="card">
+        <h3>Manpower by Area</h3>
+        <p class="hint">Actual rows only.</p>
+        <div id="bar-area"></div>
+      </div>
+
+      <div class="card wide">
+        <h3>Base Plan vs Estimated (Forecast) vs Actual &mdash; man-days by month</h3>
+        <p class="hint">Unpivoted monthly columns (Jul 2022 onwards). Only Mar 2023 is non-zero: Base Plan 34 man-days (17 + 17). Estimated is the file&rsquo;s _1FC row label; the brief calls this series &ldquo;Forecast&rdquo;. Showing Jan&ndash;Dec 2023; use the date slicers to narrow the window.</p>
+        <div id="line-plans"></div>
+        <div class="legend"><span><span class="dot" style="background:#2563EB"></span>Base Plan</span><span><span class="dot" style="background:#F59E0B"></span>Estimated (Forecast)</span><span><span class="dot" style="background:#059669"></span>Actual</span></div>
+      </div>
+
+      <div class="card wide">
+        <h3>Actual man-days per month</h3>
+        <p class="hint">Actual rows only. Every month is 0 in this template &mdash; the Actual rows carry no dates and no monthly values.</p>
+        <div id="col-actual"></div>
+      </div>
+
+      <div class="card">
+        <h3>Status by Vendor (stacked)</h3>
+        <p class="hint">Actual rows only. Status is blank on every row in this template, so nothing can be classed On Track / Delay but Manageable / Risk of Significant Delay. No values have been invented.</p>
+        <div id="bar-status"></div>
+        <div class="legend"><span><span class="dot" style="background:#059669"></span>On Track: 0</span><span><span class="dot" style="background:#F59E0B"></span>Delay but Manageable: 0</span><span><span class="dot" style="background:#DC2626"></span>Risk of Significant Delay: 0</span><span><span class="dot" style="background:#9CA3AF"></span>Not recorded: 2</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Travel Status</h3>
+        <p class="hint">Actual rows only. Travel Status is blank on every row in this template.</p>
+        <div id="bar-travel"></div>
+      </div>
+
+      <div class="card wide">
+        <h3>Personnel &mdash; Actual rows</h3>
+        <p class="hint">Name, Vendor, Position Title, Mobilization Status, Start Mob, End Mob. Blank fields are shown as &ldquo;&mdash;&rdquo;.</p>
+        <div id="tbl-personnel"></div>
+      </div>
+
+      <div class="card">
+        <h3>Mobilizations starting in next 30 days</h3>
+        <p class="hint">Actual rows with Start Mob between 16 Nov 2026 and 15 Dec 2026.</p>
+        <div id="tbl-starting"></div>
+      </div>
+
+      <div class="card">
+        <h3>Mobilizations ending in next 30 days</h3>
+        <p class="hint">Actual rows with End Mob between 16 Nov 2026 and 15 Dec 2026.</p>
+        <div id="tbl-ending"></div>
+      </div>
+
+      <div class="card wide">
+        <h3>Reference &mdash; Global Bilan snapshot, 16 Jun 2026</h3>
+        <p class="hint">Stale pivot snapshot from the &ldquo;Global Bilan&rdquo; sheet (fixed table dated 16 Jun 2026). <strong>Not live data and not used in any KPI above.</strong> Shown only for context: it is the last full-project bilan in the file. Man-days are &ldquo;Sum of Adjusted Total MD&rdquo; by Area. The CONSTRUCTION Forecast cell is blank in the source (shown as &mdash;).</p>
+        <table>
+          <thead><tr><th>Area</th><th class="num">Actual</th><th class="num">Base Plan</th><th class="num">Forecast</th><th class="num">Estimated</th></tr></thead>
+          <tbody>
+            <tr><td>CONSTRUCTION</td><td class="num">0</td><td class="num">20,322</td><td class="num">&mdash;</td><td class="num">0</td></tr>
+            <tr><td>CONSTRUCTION PROCESS</td><td class="num">25,138</td><td class="num">11,841</td><td class="num">28,840</td><td class="num">4,448</td></tr>
+            <tr><td>CONSTRUCTION U/O</td><td class="num">12,503</td><td class="num">12,968</td><td class="num">13,750</td><td class="num">1,748</td></tr>
+            <tr><td>MATERIAL</td><td class="num">3,710</td><td class="num">0</td><td class="num">3,850</td><td class="num">176</td></tr>
+            <tr><td>PCC</td><td class="num">26</td><td class="num">12,954</td><td class="num">1,038</td><td class="num">987</td></tr>
+            <tr><td>START-UP</td><td class="num">0</td><td class="num">3,435</td><td class="num">3,304</td><td class="num">3,304</td></tr>
+            <tr><td>TRAINING</td><td class="num">690</td><td class="num">1,259</td><td class="num">1,644</td><td class="num">920</td></tr>
+            <tr><td>PCC PROCESS</td><td class="num">12,544</td><td class="num">14,756</td><td class="num">24,265</td><td class="num">12,253</td></tr>
+            <tr><td>PCC U/O</td><td class="num">26,413</td><td class="num">30,412</td><td class="num">42,893</td><td class="num">17,079</td></tr>
+            <tr><td><strong>Grand Total</strong></td><td class="num"><strong>81,024</strong></td><td class="num"><strong>107,947</strong></td><td class="num"><strong>119,584</strong></td><td class="num"><strong>40,915</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <h3>Method &amp; definitions</h3>
+    <ul>
+      <li><strong>Actual-only rule:</strong> all KPIs, bars, donut and tables use Mob Plan Type = &ldquo;Actual&rdquo; only. The plan-comparison line chart is the exception &mdash; it shows Base Plan, Estimated (_1FC, labelled &ldquo;Forecast&rdquo; in the brief) and Actual together.</li>
+      <li><strong>Rows:</strong> sheet &ldquo;Manning Chart&rdquo;, headers row 13, data rows 14&ndash;24. Only 6 rows carry a VS ID (VS-21317-P001 / VS-21317-P002 &times; _0BP / _1FC / _2AC); blank VS ID rows are ignored. Blank fields are shown as &ldquo;&mdash;&rdquo; / &ldquo;Not recorded&rdquo;, never filled in.</li>
+      <li><strong>Man-days:</strong> monthly columns are NETWORKDAYS.INTL working days (weekend code 16 = Friday only, Qatar) between Adjusted Start/End Mob, capped to each calendar month. Unpivoted Jul 2022&ndash;Dec 2028 in the extracts; the line chart shows Jan&ndash;Dec 2023.</li>
+      <li><strong>On Site Today:</strong> Start Mob &le; TODAY &le; End Mob on Actual rows, with TODAY = 15 Nov 2026 (the file&rsquo;s &ldquo;Date actual&rdquo; cell). Actual rows have no dates, so the result is 0.</li>
+      <li><strong>Next 30 days:</strong> 16 Nov 2026 &ndash; 15 Dec 2026, Actual rows only. No mobilizations start or end in that window.</li>
+      <li><strong>Naming discrepancy:</strong> the _1FC rows are labelled &ldquo;Estimated&rdquo; in the file, not &ldquo;Forecast&rdquo;. The build pack maps Estimated &rarr; Forecast so the brief&rsquo;s chart labels still work.</li>
+      <li><strong>Not used:</strong> the &ldquo;Daily&rdquo; sheet is formula-driven and returns #VALUE! / blank on this stripped template; the &ldquo;Global Bilan&rdquo; totals above are a 16 Jun 2026 snapshot, not current KPIs.</li>
+      <li><strong>Files:</strong> NFE-Start-Up-Vendor-Manning-Dashboard.html (this file, no external dependencies &mdash; works offline), power-bi-build-pack.md (Power Query M + DAX + build steps), manning_actual.csv, monthly_unpivoted.csv.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ---- DATA: transcribed from Manning Chart (headers row 13, data rows 14-24) ---- */
+var TODAY = "2026-11-15";           /* file "Date actual" cell */
+var NEXT30_END = "2026-12-15";
+var BLUE="#2563EB", AMBER="#F59E0B", RED="#DC2626", GREY="#6B7280", GREEN="#059669", LIGHT="#9CA3AF";
+
+/* Actual rows only (Mob Plan Type = Actual). Blanks are empty strings, as in the file. */
+var ACTUAL = [
+  {vs:"VS-21317-P001_2AC", vendor:"a", req:"NFE1-CTJV-ME-REQ-21317", area:"CONSTRUCTION U/O",
+   disc:"", title:"1", name:"", mob:"", priority:"", status:"", travel:"",
+   plan:"Actual", start:"", end:"", closed:"", adjMD:0},
+  {vs:"VS-21317-P002_2AC", vendor:"a", req:"NFE1-CTJV-ME-REQ-21317", area:"CONSTRUCTION U/O",
+   disc:"", title:"2", name:"", mob:"", priority:"", status:"", travel:"",
+   plan:"Actual", start:"", end:"", closed:"", adjMD:0}
+];
+/* All 6 VS rows, for the plan-comparison trend (monthly man-days, Jan-Dec 2023). */
+var MONTHS = ["2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12"];
+var MONTH_LABELS = ["Jan 23","Feb 23","Mar 23","Apr 23","May 23","Jun 23","Jul 23","Aug 23","Sep 23","Oct 23","Nov 23","Dec 23"];
+var PLAN_MONTHLY = {
+  "Base Plan":      [0,0,34,0,0,0,0,0,0,0,0,0],
+  "Estimated":      [0,0,0, 0,0,0,0,0,0,0,0,0],   /* _1FC rows; brief calls this "Forecast" */
+  "Actual":         [0,0,0, 0,0,0,0,0,0,0,0,0]
+};
+/* Plan rows (all 6) carry the same Vendor/Area as the Actual rows, so vendor/area slicers apply to the trend too. */
+var PLAN_ROWS = [
+  {plan:"Base Plan", vendor:"a", area:"CONSTRUCTION U/O"},
+  {plan:"Base Plan", vendor:"a", area:"CONSTRUCTION U/O"},
+  {plan:"Estimated", vendor:"a", area:"CONSTRUCTION U/O"},
+  {plan:"Estimated", vendor:"a", area:"CONSTRUCTION U/O"},
+  {plan:"Actual",    vendor:"a", area:"CONSTRUCTION U/O"},
+  {plan:"Actual",    vendor:"a", area:"CONSTRUCTION U/O"}
+];
+
+var BLANK = "Not recorded";
+function disp(v){ return (v===null||v===undefined||String(v).trim()==="") ? "\u2014" : v; }
+function grp(v){ return (v===null||v===undefined||String(v).trim()==="") ? BLANK : String(v).trim(); }
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+/* ---- Slicers ---- */
+function fillSelect(id, values){
+  var sel=$(id); sel.innerHTML="";
+  var all=document.createElement("option"); all.value=""; all.textContent="(All)"; sel.appendChild(all);
+  values.forEach(function(v){ var o=document.createElement("option"); o.value=v; o.textContent=v; sel.appendChild(o); });
+}
+function uniq(arr){ return Array.from(new Set(arr)).sort(); }
+fillSelect("f-vendor", uniq(ACTUAL.map(function(r){return grp(r.vendor);})));
+fillSelect("f-area",   uniq(ACTUAL.map(function(r){return grp(r.area);})));
+fillSelect("f-disc",   uniq(ACTUAL.map(function(r){return grp(r.disc);})));
+fillSelect("f-mob",    uniq(ACTUAL.map(function(r){return grp(r.mob);})));
+fillSelect("f-priority",uniq(ACTUAL.map(function(r){return grp(r.priority);})));
+fillSelect("f-status", uniq(ACTUAL.map(function(r){return grp(r.status);})));
+
+function filters(){
+  return { vendor:$("f-vendor").value, area:$("f-area").value, disc:$("f-disc").value,
+           mob:$("f-mob").value, priority:$("f-priority").value, status:$("f-status").value,
+           from:$("f-from").value, to:$("f-to").value };
+}
+function matchRow(r,f){
+  if(f.vendor   && grp(r.vendor)!==f.vendor)     return false;
+  if(f.area     && grp(r.area)!==f.area)         return false;
+  if(f.disc     && grp(r.disc)!==f.disc)         return false;
+  if(f.mob      && grp(r.mob)!==f.mob)           return false;
+  if(f.priority && grp(r.priority)!==f.priority) return false;
+  if(f.status   && grp(r.status)!==f.status)     return false;
+  if(f.from || f.to){ /* date range filters on Start Mob; blank dates are excluded, as in Power BI */
+    if(!r.start) return false;
+    if(f.from && r.start < f.from) return false;
+    if(f.to   && r.start > f.to)   return false;
+  }
+  return true;
+}
+
+/* ---- SVG helpers ---- */
+var NS="http://www.w3.org/2000/svg";
+function svgEl(tag, attrs){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); return e; }
+function hbarChart(containerId, data, color){
+  /* data: [[label, value], ...] horizontal bars */
+  var el=$(containerId); el.innerHTML="";
+  if(!data.length){ el.innerHTML='<div class="empty">No data for the current slicers.</div>'; return; }
+  var max=Math.max.apply(null, data.map(function(d){return d[1];}).concat([1]));
+  var W=560, rowH=30, H=data.length*rowH+8;
+  var svg=svgEl("svg",{width:"100%",viewBox:"0 0 "+W+" "+H,role:"img"});
+  data.forEach(function(d,i){
+    var y=6+i*rowH, bw=Math.max(d[1]/max*(W-170), d[1]>0?3:0);
+    var t=svgEl("text",{x:0,y:y+13,"font-size":12,fill:"#1F2937"}); t.textContent=d[0].length>22?d[0].slice(0,21)+"\u2026":d[0]; svg.appendChild(t);
+    svg.appendChild(svgEl("rect",{x:170,y:y,width:bw,height:18,rx:3,fill:color}));
+    var v=svgEl("text",{x:176+bw,y:y+13,"font-size":12,"font-weight":700,fill:"#1F2937"}); v.textContent=d[1]; svg.appendChild(v);
+  });
+  el.appendChild(svg);
+}
+function countBy(rows, keyFn){
+  var m={}; rows.forEach(function(r){ var k=keyFn(r); m[k]=(m[k]||0)+1; });
+  return Object.keys(m).sort(function(a,b){return m[b]-m[a];}).map(function(k){return [k,m[k]];});
+}
+
+/* ---- Render ---- */
+function render(){
+  var f=filters();
+  var rows=ACTUAL.filter(function(r){return matchRow(r,f);});
+  var dateActive = !!(f.from||f.to);
+
+  /* KPI cards (Actual rows only) */
+  var total=rows.length;
+  var mob=rows.filter(function(r){return r.mob.trim().toLowerCase()==="mobilized";}).length;
+  var under=rows.filter(function(r){var m=r.mob.trim().toLowerCase(); return m==="under mob"||m==="under mobilization";}).length;
+  var closed=rows.filter(function(r){return String(r.closed).trim()!=="";}).length;
+  var susp=rows.filter(function(r){return r.mob.trim().toLowerCase()==="suspended";}).length;
+  var onsite=rows.filter(function(r){return r.start && r.end && r.start<=TODAY && TODAY<=r.end;}).length;
+  $("kpi-total").textContent=total;
+  $("kpi-mobilized").textContent=mob;
+  $("kpi-undermob").textContent=under;
+  $("kpi-closed").textContent=closed;
+  $("kpi-suspended").textContent=susp;
+  $("kpi-mobpct").textContent=(total? Math.round(mob/total*100):0)+"%";
+  $("kpi-onsite").textContent=onsite;
+  $("filter-note").textContent = dateActive
+    ? "Date range active: Actual rows have no Start Mob dates, so "+total+" of 2 Actual rows match the current slicers."
+    : (total<ACTUAL.length ? "Filtered view: "+total+" of 2 Actual rows match the current slicers." : "");
+
+  /* Donut: Mobilization Status — each Actual row falls in exactly one bucket,
+     so the segments always sum to Total Manpower, even on live data. */
+  function bucket(r){
+    var m=r.mob.trim().toLowerCase();
+    if(m==="mobilized") return "Mobilized";
+    if(m==="under mob"||m==="under mobilization") return "Under Mob";
+    if(m==="suspended") return "Suspended";
+    if(String(r.closed).trim()!=="") return "Closed";
+    return "Not recorded";
+  }
+  var cats=[["Mobilized",0,BLUE],["Under Mob",0,AMBER],["Suspended",0,RED],["Closed",0,GREY],["Not recorded",0,LIGHT]];
+  rows.forEach(function(r){ var b=bucket(r); for(var i=0;i<cats.length;i++){ if(cats[i][0]===b) cats[i][1]++; } });
+  var donut=$("donut"); donut.innerHTML="";
+  if(total===0){ donut.innerHTML='<div class="empty">No Actual rows match the current slicers.</div>'; }
+  else{
+    var R=70, C=2*Math.PI*R, cx=110, cy=100, off=0, svg=svgEl("svg",{width:220,height:200,viewBox:"0 0 220 200",role:"img"});
+    cats.forEach(function(c){
+      if(c[1]<=0) return;
+      var frac=c[1]/total, len=frac*C;
+      var circle=svgEl("circle",{cx:cx,cy:cy,r:R,fill:"none",stroke:c[2],"stroke-width":34,
+        "stroke-dasharray":(len-2)+" "+(C-len+2),"stroke-dashoffset":-off,transform:"rotate(-90 "+cx+" "+cy+")"});
+      svg.appendChild(circle); off+=len;
+    });
+    var ct=svgEl("text",{x:cx,y:cy-4,"text-anchor":"middle","font-size":26,"font-weight":700,fill:"#1F2937"}); ct.textContent=total; svg.appendChild(ct);
+    var cl=svgEl("text",{x:cx,y:cy+16,"text-anchor":"middle","font-size":11,fill:"#6B7280"}); cl.textContent="Actual rows"; svg.appendChild(cl);
+    donut.appendChild(svg);
+  }
+  $("donut-legend").innerHTML=cats.map(function(c){
+    return '<span><span class="dot" style="background:'+c[2]+'"></span>'+esc(c[0])+": "+c[1]+"</span>";
+  }).join("");
+
+  /* Bars */
+  hbarChart("bar-vendor", countBy(rows,function(r){return grp(r.vendor);}).slice(0,10), BLUE);
+  hbarChart("bar-disc",   countBy(rows,function(r){return grp(r.disc);}), BLUE);
+  hbarChart("bar-area",   countBy(rows,function(r){return grp(r.area);}), BLUE);
+  hbarChart("bar-travel", countBy(rows,function(r){return grp(r.travel);}), BLUE);
+
+  /* Stacked bar: Status by Vendor (Actual rows only) */
+  var sb=$("bar-status"); sb.innerHTML="";
+  var vendors=uniq(rows.map(function(r){return grp(r.vendor);}));
+  if(!vendors.length){ sb.innerHTML='<div class="empty">No Actual rows match the current slicers.</div>'; }
+  else{
+    var W=560, H=vendors.length*34+14, maxV=Math.max.apply(null, vendors.map(function(v){return rows.filter(function(r){return grp(r.vendor)===v;}).length;}).concat([1]));
+    var svg2=svgEl("svg",{width:"100%",viewBox:"0 0 "+W+" "+H,role:"img"});
+    var segCols={"On Track":GREEN,"Delay but Manageable":AMBER,"Risk of Significant Delay":RED,"Not recorded":LIGHT};
+    vendors.forEach(function(v,i){
+      var y=8+i*34, x=170, n=rows.filter(function(r){return grp(r.vendor)===v;}).length;
+      var t=svgEl("text",{x:0,y:y+13,"font-size":12,fill:"#1F2937"}); t.textContent=v; svg2.appendChild(t);
+      ["On Track","Delay but Manageable","Risk of Significant Delay","Not recorded"].forEach(function(s){
+        var c=rows.filter(function(r){return grp(r.vendor)===v && grp(r.status)===s;}).length;
+        if(c>0){ var w=Math.max(c/maxV*(W-210),3);
+          svg2.appendChild(svgEl("rect",{x:x,y:y,width:w,height:18,rx:3,fill:segCols[s]}));
+          var lbl=svgEl("text",{x:x+w/2,y:y+13,"text-anchor":"middle","font-size":11,"font-weight":700,fill:"#fff"}); lbl.textContent=c; svg2.appendChild(lbl);
+          x+=w;
+        }
+      });
+      var tot=svgEl("text",{x:x+6,y:y+13,"font-size":12,"font-weight":700,fill:"#1F2937"}); tot.textContent=n; svg2.appendChild(tot);
+    });
+    sb.appendChild(svg2);
+  }
+
+  /* Trend: line chart + Actual columns, bounded by date slicers */
+  var idx=MONTHS.map(function(m,i){return i;}).filter(function(i){
+    if(f.from && MONTHS[i]+"-01" < f.from.slice(0,7)+"-01") return false;
+    if(f.to   && MONTHS[i]+"-01" > f.to.slice(0,7)+"-01")   return false;
+    return true;
+  });
+  if(!idx.length) idx=MONTHS.map(function(m,i){return i;});
+  var planOK = PLAN_ROWS.some(function(r){ return (!f.vendor||grp(r.vendor)===f.vendor) && (!f.area||grp(r.area)===f.area); });
+  drawLine("line-plans", idx, planOK);
+  drawActualCols("col-actual", idx, planOK);
+
+  /* Tables */
+  renderPersonnel(rows);
+  renderWindow("tbl-starting", rows, "start");
+  renderWindow("tbl-ending", rows, "end");
+}
+function drawLine(id, idx, planOK){
+  var el=$(id); el.innerHTML="";
+  var W=760, H=260, padL=44, padB=28, padT=14, padR=10;
+  var series=[["Base Plan",PLAN_MONTHLY["Base Plan"],BLUE],["Estimated (Forecast)",PLAN_MONTHLY["Estimated"],AMBER],["Actual",PLAN_MONTHLY["Actual"],GREEN]];
+  var maxV=1; series.forEach(function(s){ s[1].forEach(function(v){ if(v>maxV) maxV=v; }); });
+  if(!planOK) maxV=1;
+  var svg=svgEl("svg",{width:"100%",viewBox:"0 0 "+W+" "+H,role:"img"});
+  var X=function(i){ return padL + (idx.length===1? (W-padL-padR)/2 : i*(W-padL-padR)/(idx.length-1)); };
+  var Y=function(v){ return (H-padB) - v/maxV*(H-padB-padT); };
+  [0,0.5,1].forEach(function(fr){
+    var gv=Math.round(maxV*fr);
+    svg.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:Y(gv),y2:Y(gv),stroke:"#E5E7EB"}));
+    var t=svgEl("text",{x:padL-6,y:Y(gv)+4,"text-anchor":"end","font-size":11,fill:"#6B7280"}); t.textContent=gv; svg.appendChild(t);
+  });
+  if(!planOK){ el.innerHTML='<div class="empty">No plan rows match the current Vendor / Area slicers.</div>'; return; }
+  series.forEach(function(s){
+    var pts=idx.map(function(mi,i){ return X(i)+","+Y(s[1][mi]); }).join(" ");
+    svg.appendChild(svgEl("polyline",{points:pts,fill:"none",stroke:s[2],"stroke-width":2.5,"stroke-linejoin":"round"}));
+    idx.forEach(function(mi,i){
+      svg.appendChild(svgEl("circle",{cx:X(i),cy:Y(s[1][mi]),r:4,fill:s[2],stroke:"#fff","stroke-width":1.5}));
+      if(s[1][mi]>0){ var t=svgEl("text",{x:X(i),y:Y(s[1][mi])-9,"text-anchor":"middle","font-size":12,"font-weight":700,fill:s[2]}); t.textContent=s[1][mi]; svg.appendChild(t); }
+    });
+  });
+  idx.forEach(function(mi,i){
+    var t=svgEl("text",{x:X(i),y:H-8,"text-anchor":"middle","font-size":11,fill:"#6B7280"}); t.textContent=MONTH_LABELS[mi]; svg.appendChild(t);
+  });
+  el.appendChild(svg);
+}
+function drawActualCols(id, idx, planOK){
+  var el=$(id); el.innerHTML="";
+  var W=760, H=220, padL=44, padB=28, padT=14, padR=10;
+  var svg=svgEl("svg",{width:"100%",viewBox:"0 0 "+W+" "+H,role:"img"});
+  var bw=Math.min(44,(W-padL-padR)/idx.length*0.55);
+  var maxV=1;
+  var Y=function(v){ return (H-padB) - v/maxV*(H-padB-padT); };
+  svg.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:Y(0),y2:Y(0),stroke:"#9CA3AF"}));
+  var t0=svgEl("text",{x:padL-6,y:Y(0)+4,"text-anchor":"end","font-size":11,fill:"#6B7280"}); t0.textContent="0"; svg.appendChild(t0);
+  if(!planOK){ el.innerHTML='<div class="empty">No plan rows match the current Vendor / Area slicers.</div>'; return; }
+  idx.forEach(function(mi,i){
+    var v=PLAN_MONTHLY["Actual"][mi];
+    var x=padL + (idx.length===1? (W-padL-padR)/2 : i*(W-padL-padR)/(idx.length-1)) - bw/2;
+    svg.appendChild(svgEl("rect",{x:x,y:Y(v),width:bw,height:Math.max((H-padB)-Y(v),2),rx:3,fill:BLUE}));
+    var t=svgEl("text",{x:x+bw/2,y:H-8,"text-anchor":"middle","font-size":11,fill:"#6B7280"}); t.textContent=MONTH_LABELS[mi]; svg.appendChild(t);
+    var vl=svgEl("text",{x:x+bw/2,y:Y(v)-6,"text-anchor":"middle","font-size":12,"font-weight":700,fill:"#1F2937"}); vl.textContent=v; svg.appendChild(vl);
+  });
+  el.appendChild(svg);
+  var note=document.createElement("p"); note.className="hint";
+  note.textContent="All months shown are 0 man-days for Actual. Base Plan total for the same window is 34 man-days (Mar 2023).";
+  el.appendChild(note);
+}
+function renderPersonnel(rows){
+  var el=$("tbl-personnel");
+  if(!rows.length){ el.innerHTML='<div class="empty">No Actual rows match the current slicers.</div>'; return; }
+  var html='<table><thead><tr><th>Name</th><th>Vendor</th><th>Position Title</th><th>Mobilization Status</th><th>Start Mob</th><th>End Mob</th><th>VS ID</th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    html+='<tr><td>'+esc(disp(r.name))+'</td><td>'+esc(disp(r.vendor))+'</td><td>'+esc(disp(r.title))+'</td><td>'+esc(disp(r.mob))+'</td><td>'+esc(disp(r.start))+'</td><td>'+esc(disp(r.end))+'</td><td>'+esc(r.vs)+'</td></tr>';
+  });
+  el.innerHTML=html+'</tbody></table>';
+}
+function renderWindow(id, rows, field){
+  var el=$(id);
+  var hits=rows.filter(function(r){
+    var d=r[field]; return d && d>TODAY && d<=NEXT30_END;
+  });
+  if(!hits.length){
+    el.innerHTML='<div class="empty">None &mdash; no Actual-row mobilization '+(field==="start"?"starts":"ends")+' between 16 Nov 2026 and 15 Dec 2026.</div>';
+    return;
+  }
+  var html='<table><thead><tr><th>Name</th><th>Vendor</th><th>Position Title</th><th>'+(field==="start"?"Start Mob":"End Mob")+'</th><th>VS ID</th></tr></thead><tbody>';
+  hits.forEach(function(r){ html+='<tr><td>'+esc(disp(r.name))+'</td><td>'+esc(disp(r.vendor))+'</td><td>'+esc(disp(r.title))+'</td><td>'+esc(r[field])+'</td><td>'+esc(r.vs)+'</td></tr>'; });
+  el.innerHTML=html+'</tbody></table>';
+}
+
+["f-vendor","f-area","f-disc","f-mob","f-priority","f-status","f-from","f-to"].forEach(function(id){
+  $(id).addEventListener("change", render);
+});
+$("reset").addEventListener("click", function(){
+  ["f-vendor","f-area","f-disc","f-mob","f-priority","f-status"].forEach(function(id){ $(id).value=""; });
+  $("f-from").value=""; $("f-to").value=""; render();
+});
+render();
+</script>
+</body>
+</html>
