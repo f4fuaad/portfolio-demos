@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Warranty Tracker — LNG Project Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f4f3; --surface:#ffffff; --surface2:#eef2f0; --line:#dde3df;
+    --ink:#13221c; --muted:#5c6b62; --faint:#8a9a8f;
+    --navy:#0f2a3d; --teal:#0e7a6b; --teal-light:#e0f2ee;
+    --amber:#b7790a; --amber-bg:#fdf3d7; --red:#b42318; --red-bg:#fdecea;
+    --green:#147a4a; --green-bg:#e6f4ec; --blue:#1a5a8a; --blue-bg:#e6eef6;
+    --shadow:0 1px 3px rgba(15,42,61,.08),0 8px 24px rgba(15,42,61,.06);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1512; --surface:#16201b; --surface2:#1c2a23; --line:#2a3a32;
+      --ink:#e8f0eb; --muted:#a7b8ad; --faint:#7d8f83;
+      --navy:#d6e6f0; --teal:#2ec4a8; --teal-light:#16382f;
+      --amber:#f0b84a; --amber-bg:#3a2f10; --red:#ff8a7a; --red-bg:#3d1f1a;
+      --green:#4ade8a; --green-bg:#143324; --blue:#7ab8e6; --blue-bg:#162e44;
+      --shadow:0 1px 3px rgba(0,0,0,.4);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Barlow",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+  button,[role="button"],select,input{ min-height:38px; font-family:inherit}
+  a{color:var(--teal)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 16px 40px}
+
+  /* Top bar */
+  .topbar{background:var(--navy);color:#fff;margin:0 -0px}
+  @media (prefers-color-scheme: dark){ .topbar{background:#0a1e2e} }
+  .topbar-in{max-width:1180px;margin:0 auto;padding:18px 16px 16px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:flex-end}
+  .topbar h1{font-family:"Barlow Condensed",sans-serif;font-size:34px;line-height:.95;letter-spacing:.02em;margin:0;text-transform:uppercase}
+  .topbar h1 span{color:#3ec9b0}
+  .topbar p{margin:6px 0 0;opacity:.82;font-size:14.5px;max-width:560px}
+  .top-meta{text-align:right;font-size:13px;line-height:1.5;opacity:.95}
+  .top-meta strong{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+  .demo-pill{display:inline-flex;align-items:center;gap:6px;background:#f5c542;color:#1a1a1a;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;margin-bottom:8px}
+  .demo-pill::before{content:"";width:7px;height:7px;background:#1a1a1a;border-radius:50%}
+
+  /* Alert strip */
+  .alert-strip{margin:16px 0 0;background:var(--amber-bg);border:1px solid color-mix(in srgb, var(--amber) 35%, transparent);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+  .alert-strip .icon{font-size:20px;line-height:1}
+  .alert-strip strong{color:var(--amber)}
+  .alert-strip p{margin:2px 0 0;font-size:14px}
+
+  /* KPIs */
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+  @media(max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 14px 12px;box-shadow:var(--shadow)}
+  .kpi label{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;display:block}
+  .kpi .num{font-family:"Barlow Condensed",sans-serif;font-size:38px;line-height:1;margin:6px 0 2px;font-weight:700}
+  .kpi .sub{font-size:13px;color:var(--muted)}
+  .kpi.red .num{color:var(--red)} .kpi.amber .num{color:var(--amber)} .kpi.teal .num{color:var(--teal)} .kpi.green .num{color:var(--green)}
+
+  /* Layout grids */
+  .grid2{display:grid;grid-template-columns:1.35fr .85fr;gap:14px;margin-top:14px}
+  .grid2b{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:820px){.grid2,.grid2b{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+  .card h2{margin:0;font-size:16px;letter-spacing:.01em}
+  .card h2 + p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+  .tag{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:var(--surface2);color:var(--muted);white-space:nowrap}
+
+  /* Bar chart */
+  .bars{display:grid;gap:10px}
+  .bar-row{display:grid;grid-template-columns:148px 1fr 28px;gap:10px;align-items:center;font-size:13.5px}
+  .bar-row .label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);font-weight:500}
+  .track{height:10px;background:var(--surface2);border-radius:999px;overflow:hidden}
+  .fill{height:100%;border-radius:999px;background:var(--teal)}
+  .fill.amber{background:#d99a16}.fill.red{background:#d6453a}.fill.blue{background:#2f7ab8}.fill.navy{background:#33566e}
+  .bar-row .val{font-weight:700;text-align:right}
+
+  /* Donut legend */
+  .donut-wrap{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .legend{display:grid;gap:8px;font-size:14px}
+  .legend div{display:flex;align-items:center;gap:8px}
+  .dot{width:10px;height:10px;border-radius:50%;flex:none}
+
+  /* Timeline */
+  .timeline{display:grid;gap:0}
+  .tl-row{display:grid;grid-template-columns:86px 1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+  .tl-row:last-child{border-bottom:0}
+  .tl-date{font-weight:700;font-size:13px;color:var(--muted);letter-spacing:.02em}
+  .tl-main strong{display:block;font-size:14.5px}
+  .tl-main span{font-size:13px;color:var(--muted)}
+  .pill{font-size:12px;font-weight:700;padding:5px 9px;border-radius:999px;white-space:nowrap}
+  .pill.red{background:var(--red-bg);color:var(--red)} .pill.amber{background:var(--amber-bg);color:var(--amber)} .pill.green{background:var(--green-bg);color:var(--green)} .pill.blue{background:var(--blue-bg);color:var(--blue)} .pill.grey{background:var(--surface2);color:var(--muted)}
+
+  /* Controls */
+  .controls{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+  .controls-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  .controls h2{margin:0;font-size:18px}
+  .controls p{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .filters select,.filters input{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:0 12px;font-size:14px}
+  .filters input{flex:1;min-width:180px}
+  .seg{display:flex;background:var(--surface2);border-radius:999px;padding:3px;gap:2px}
+  .seg button{border:0;background:transparent;padding:0 14px;border-radius:999px;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--muted);min-height:36px}
+  .seg button.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+
+  /* Table / cards */
+  .table-wrap{margin-top:12px;overflow:hidden;border:1px solid var(--line);border-radius:12px}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+  thead th{text-align:left;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:11px 12px;background:var(--surface2);border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:color-mix(in srgb, var(--teal) 5%, transparent)}
+  tbody tr:last-child td{border-bottom:0}
+  .tagcode{font-family:ui-monospace,monospace;font-size:12.5px;font-weight:700;background:var(--surface2);padding:3px 6px;border-radius:6px;white-space:nowrap}
+  .equip strong{display:block}
+  .equip span{color:var(--muted);font-size:13px}
+  .days{font-weight:700;white-space:nowrap}
+  .days.urgent{color:var(--red)} .days.soon{color:var(--amber)}
+  .mobile-cards{display:none}
+  @media(max-width:760px){
+    .table-wrap{display:none}
+    .mobile-cards{display:grid;gap:10px;margin-top:12px}
+    .mcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer}
+    .mcard-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .mcard h3{margin:0;font-size:15px;line-height:1.3}
+    .mcard p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+    .mcard-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  }
+  .empty{padding:28px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px;margin-top:12px}
+
+  /* Claims */
+  .claim{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .claim:last-child{border-bottom:0}
+  .claim-num{width:42px;height:42px;border-radius:10px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+  @media(prefers-color-scheme:dark){.claim-num{background:#1e3a4f}}
+  .claim-main{flex:1;min-width:0}
+  .claim-main strong{font-size:14.5px}
+  .claim-main p{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+
+  /* Automation */
+  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch;margin-top:12px}
+  @media(max-width:700px){.flow{grid-template-columns:1fr} .arrow{transform:rotate(90deg);justify-self:center}}
+  .flow-step{background:var(--surface2);border-radius:12px;padding:14px}
+  .flow-step b{font-size:14px;display:block}
+  .flow-step p{margin:4px 0 0;font-size:13.5px;color:var(--muted)}
+  .flow-step .step-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-weight:800}
+  .arrow{align-self:center;font-size:20px;color:var(--faint)}
+  .alert-rules{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  @media(max-width:640px){.alert-rules{grid-template-columns:1fr}}
+  .rule{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface)}
+  .rule strong{font-size:22px;font-family:"Barlow Condensed",sans-serif}
+  .rule p{margin:2px 0 0;font-size:13.5px;color:var(--muted)}
+
+  /* Detail drawer */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;display:none}
+  .overlay.open{display:block}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);background:var(--surface);z-index:50;transform:translateX(105%);transition:transform .25s ease,visibility .25s;overflow:auto;padding:20px;box-shadow:-12px 0 32px rgba(0,0,0,.2);visibility:hidden;pointer-events:none}
+  .drawer.open{transform:none;visibility:visible;pointer-events:auto}
+  .drawer[hidden]{display:none}
+  .drawer h2{margin:6px 0 4px;font-size:20px;line-height:1.2}
+  .drawer .close{float:right;border:1px solid var(--line);background:var(--bg);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:18px}
+  .dl{display:grid;grid-template-columns:118px 1fr;gap:8px 12px;margin-top:16px;font-size:14px}
+  .dl dt{color:var(--muted);font-weight:600} .dl dd{margin:0;font-weight:500}
+  .drawer .note{margin-top:16px;background:var(--surface2);border-radius:10px;padding:12px;font-size:14px}
+  .drawer .note strong{display:block;margin-bottom:4px}
+
+  footer{margin-top:22px;color:var(--muted);font-size:13px;text-align:center;line-height:1.6}
+  .section-title{margin:22px 0 0;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .section-title h2{font-size:19px;margin:0}
+  .section-title span{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div>
+      <div class="demo-pill">Demo — Sample Data</div>
+      <h1>Warranty <span>Tracker</span></h1>
+      <p>LNG Expansion Project · Turnover &amp; Completions — every system, vendor warranty and open claim in one live view. No Excel chase.</p>
+    </div>
+    <div class="top-meta">
+      <strong>As of</strong>
+      20 Nov 2026 · Ras Laffan<br>
+      Handover phase — Trains 1 &amp; 2<br>
+      <span style="opacity:.75">Prepared as a concept demo</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="alert-strip" role="alert">
+    <div class="icon" aria-hidden="true">⚠️</div>
+    <div>
+      <strong>Action needed this month:</strong> 4 warranties expire in the next 30 days and 2 claims are overdue with vendors.
+      <p>In the live version, Power Automate would already have sent 90 / 60 / 30-day reminders to the warranty owner, vendor and completions team — see the automation section below.</p>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <section class="kpis" aria-label="Key figures">
+    <div class="kpi teal"><label>Systems in register</label><div class="num" id="kTotal">—</div><div class="sub">13 active · 1 expired · 6 vendors</div></div>
+    <div class="kpi amber"><label>Expiring ≤ 90 days</label><div class="num" id="kSoon">—</div><div class="sub">Need claim check now</div></div>
+    <div class="kpi"><label>Open claims</label><div class="num" id="kOpen">—</div><div class="sub">With vendors right now</div></div>
+    <div class="kpi red"><label>Overdue claims</label><div class="num" id="kOverdue">—</div><div class="sub">Past vendor due date</div></div>
+    <div class="kpi green"><label>Claims closed</label><div class="num" id="kClosed">—</div><div class="sub">Resolved &amp; signed off</div></div>
+  </section>
+
+  <!-- Charts row -->
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head"><div><h2>Warranties by area / system</h2><p>Where cover is concentrated — and where expiry risk sits.</p></div><span class="tag">Register</span></div>
+      <div class="bars" id="areaBars"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><div><h2>Claims by status</h2><p>Open work at a glance.</p></div><span class="tag">Claims</span></div>
+      <div class="donut-wrap">
+        <svg width="132" height="132" viewBox="0 0 132 132" aria-label="Claims by status chart" role="img">
+          <!-- 12 claims: Open 4, In progress 3, Overdue 2, Closed 3 -->
+          <circle cx="66" cy="66" r="52" fill="none" stroke="var(--surface2)" stroke-width="18"/>
+          <circle cx="66" cy="66" r="52" fill="none" stroke="#0e7a6b" stroke-width="18" stroke-dasharray="109 327" transform="rotate(-90 66 66)"/>
+          <circle cx="66" cy="66" r="52" fill="none" stroke="#2f7ab8" stroke-width="18" stroke-dasharray="82 327" stroke-dashoffset="-109" transform="rotate(-90 66 66)"/>
+          <circle cx="66" cy="66" r="52" fill="none" stroke="#d6453a" stroke-width="18" stroke-dasharray="55 327" stroke-dashoffset="-191" transform="rotate(-90 66 66)"/>
+          <circle cx="66" cy="66" r="52" fill="none" stroke="#9aa8a0" stroke-width="18" stroke-dasharray="81 327" stroke-dashoffset="-246" transform="rotate(-90 66 66)"/>
+          <text x="66" y="62" text-anchor="middle" font-size="26" font-weight="700" fill="var(--ink)" font-family="Barlow Condensed">12</text>
+          <text x="66" y="82" text-anchor="middle" font-size="11" fill="var(--muted)">CLAIMS</text>
+        </svg>
+        <div class="legend">
+          <div><span class="dot" style="background:#0e7a6b"></span> Open — 4</div>
+          <div><span class="dot" style="background:#2f7ab8"></span> In progress — 3</div>
+          <div><span class="dot" style="background:#d6453a"></span> Overdue — 2</div>
+          <div><span class="dot" style="background:#9aa8a0"></span> Closed — 3</div>
+        </div>
+      </div>
+      <p style="margin:14px 0 0;font-size:13.5px;color:var(--muted)">Longest open claim: <strong style="color:var(--ink)">W-014 — 68 days</strong> with vendor, seal failure on P-204B. Flagged in the register below.</p>
+    </section>
+  </div>
+
+  <div class="grid2b">
+    <section class="card">
+      <div class="card-head"><div><h2>Next expiries</h2><p>Soonest first — claim or extend before these dates.</p></div><span class="tag">Timeline</span></div>
+      <div class="timeline" id="timeline"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><div><h2>Open claims by vendor</h2><p>Who owes us a fix right now — open, in progress &amp; overdue only (9).</p></div><span class="tag">Vendors</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="label">Rotating Equip. Co.</span><div class="track"><div class="fill red" style="width:100%"></div></div><span class="val">3</span></div>
+        <div class="bar-row"><span class="label">Process Systems Ltd</span><div class="track"><div class="fill amber" style="width:67%"></div></div><span class="val">2</span></div>
+        <div class="bar-row"><span class="label">Electrical &amp; Controls</span><div class="track"><div class="fill blue" style="width:67%"></div></div><span class="val">2</span></div>
+        <div class="bar-row"><span class="label">Marine &amp; Loading</span><div class="track"><div class="fill navy" style="width:33%"></div></div><span class="val">1</span></div>
+        <div class="bar-row"><span class="label">HVAC &amp; Buildings</span><div class="track"><div class="fill navy" style="width:33%"></div></div><span class="val">1</span></div>
+        <div class="bar-row"><span class="label">Valves &amp; Piping</span><div class="track"><div class="fill" style="width:0%"></div></div><span class="val">0</span></div>
+      </div>
+      <p style="margin:12px 0 0;font-size:13.5px;color:var(--muted)">Rotating Equipment Co. carries the most open claims and both overdue items — first candidate for a weekly vendor review.</p>
+    </section>
+  </div>
+
+  <!-- Register -->
+  <section class="controls" aria-label="Warranty register">
+    <div class="controls-top">
+      <div><h2>Warranty register</h2><p>Tap any row for full detail — handover, warranty terms and claim history.</p></div>
+      <div class="seg" role="tablist" aria-label="Filter by status">
+        <button class="active" data-seg="all">All</button>
+        <button data-seg="active">Active</button>
+        <button data-seg="expiring">Expiring</button>
+        <button data-seg="claim">Has claim</button>
+      </div>
+    </div>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Search tag, equipment, vendor or system…" aria-label="Search register">
+      <select id="fArea" aria-label="Filter by area"><option value="">All areas</option></select>
+      <select id="fVendor" aria-label="Filter by vendor"><option value="">All vendors</option></select>
+      <select id="fStatus" aria-label="Filter by warranty status">
+        <option value="">Any status</option><option>Active</option><option>Expiring soon</option><option>Expired</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tag / Equipment</th><th>Area</th><th>Vendor</th><th>Warranty ends</th><th>Days left</th><th>Status</th><th>Claim</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="mobile-cards" id="mcards"></div>
+    <div class="empty" id="empty" hidden>No warranties match those filters. Try clearing the search.</div>
+    <p id="countLine" style="margin:10px 2px 0;font-size:13px;color:var(--muted)"></p>
+  </section>
+
+  <!-- Claims needing attention -->
+  <div class="section-title"><h2>Claims needing attention</h2><span>Sorted by days open</span></div>
+  <section class="card" style="margin-top:10px">
+    <div id="claimsList"></div>
+  </section>
+
+  <!-- Automation -->
+  <div class="section-title"><h2>How this runs live — no manual chasing</h2><span>Microsoft 365 only</span></div>
+  <section class="card" style="margin-top:10px">
+    <p style="margin:0;color:var(--muted);font-size:14.5px">Built for a corporate EPC setup: one SharePoint list everyone updates, Power BI on top, and Power Automate doing the reminders. No extra software, no n8n, nothing for IT to block.</p>
+    <div class="flow">
+      <div class="flow-step"><span class="step-label">1 · Source</span><b>SharePoint list</b><p>Completions team adds each system at handover — tag, vendor, warranty start &amp; end, PO. One shared copy, no emailed Excels.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="flow-step"><span class="step-label">2 · Dashboard</span><b>Power BI (this view)</b><p>Refreshes automatically from the list. Management sees expiries, open claims and vendor performance in one place.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="flow-step"><span class="step-label">3 · Alerts</span><b>Power Automate</b><p>Sends the reminders and the Monday report on its own — Outlook + Teams, with a Planner task for overdue claims.</p></div>
+    </div>
+    <div class="alert-rules">
+      <div class="rule"><strong>90 days</strong><p><b>Heads-up</b> — email to warranty owner: check the system, log any defects as claims before cover ends.</p></div>
+      <div class="rule"><strong>30 days</strong><p><b>Urgent</b> — Teams message + Planner task. Open claims with that vendor are listed in the same alert.</p></div>
+      <div class="rule"><strong>Every Monday</strong><p><b>Weekly PDF</b> — this dashboard sent automatically to project &amp; completions leads. No one builds it by hand.</p></div>
+    </div>
+    <p style="margin:14px 0 0;font-size:13.5px;color:var(--muted)">Same pattern already proven on the NFE Vendor Manning dashboard: SharePoint in, Power BI out, refresh in minutes instead of a day of Excel work.</p>
+  </section>
+
+  <footer>
+    Warranty Tracker — concept demo with sample data for discussion purposes. Vendors, tags and dates are illustrative.<br>
+    In production this connects to the project SharePoint warranty register and refreshes in Power BI.
+  </footer>
+</div>
+
+<!-- Detail drawer -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Warranty detail" hidden>
+  <button class="close" id="closeDrawer" aria-label="Close detail">✕</button>
+  <span class="tag" id="dArea"></span>
+  <h2 id="dTitle"></h2>
+  <p id="dSub" style="margin:0;color:var(--muted)"></p>
+  <dl class="dl" id="dList"></dl>
+  <div class="note"><strong>Claim / notes</strong><span id="dNote"></span></div>
+  <div class="note" style="margin-top:10px"><strong>Next action</strong><span id="dAction"></span></div>
+</aside>
+
+<script>
+var TODAY = new Date('2026-11-20T00:00:00');
+var DATA = [
+  {tag:'K-101', equip:'Main Refrigerant Compressor', area:'Liquefaction — Train 1', vendor:'Rotating Equipment Co.', po:'PO-44102', handover:'14 Mar 2025', start:'14 Mar 2025', end:'2026-12-10', claim:'Open', claimId:'W-011', note:'Vibration above alert limit on DE bearing since Oct. Vendor inspection booked.', action:'Vendor site visit 24 Nov; hold final acceptance until report received.'},
+  {tag:'P-204B', equip:'Boil-Off Gas Pump B', area:'Storage & Loading', vendor:'Rotating Equipment Co.', po:'PO-44118', handover:'02 May 2025', start:'02 May 2025', end:'2027-05-02', claim:'Overdue', claimId:'W-014', note:'Mechanical seal failure — longest open claim (68 days). Spare seal on order by vendor.', action:'Escalate at weekly vendor review; claim LD position to be confirmed by contracts.'},
+  {tag:'E-305', equip:'Dehydration Regeneration Heater', area:'Gas Treatment', vendor:'Process Systems Ltd', po:'PO-44207', handover:'20 Jan 2025', start:'20 Jan 2025', end:'2026-11-28', claim:'In progress', claimId:'W-009', note:'Tube leak found on inspection. Vendor supplying replacement bundle under warranty.', action:'Bundle delivery due 26 Nov — raise claim closure checklist now, cover ends 28 Nov.'},
+  {tag:'V-118', equip:'Emergency Shutdown Valve', area:'Utilities', vendor:'Valves & Piping GmbH', po:'PO-44331', handover:'11 Jun 2025', start:'11 Jun 2025', end:'2027-06-11', claim:'None', claimId:'—', note:'No defects reported. Partial stroke test passed Sep 2026.', action:'None — routine surveillance only.'},
+  {tag:'M-402', equip:'Loading Arm No. 2', area:'Storage & Loading', vendor:'Marine & Loading', po:'PO-44410', handover:'08 Aug 2025', start:'08 Aug 2025', end:'2027-08-08', claim:'Open', claimId:'W-012', note:'Hydraulic swivel weep reported by operations. Photos shared with vendor.', action:'Vendor to confirm if covered as defect or wear — awaiting written reply.'},
+  {tag:'AC-501', equip:'Substation HVAC Package', area:'Utilities', vendor:'HVAC & Buildings', po:'PO-44502', handover:'15 Feb 2025', start:'15 Feb 2025', end:'2026-12-05', claim:'In progress', claimId:'W-010', note:'Compressor short-cycling. Vendor technician attended, controls patch applied.', action:'Monitor for 14 days, then close claim if stable. Cover ends 5 Dec.'},
+  {tag:'T-210', equip:'Amine Contactor Tower Internals', area:'Gas Treatment', vendor:'Process Systems Ltd', po:'PO-44219', handover:'20 Jan 2025', start:'20 Jan 2025', end:'2027-01-20', claim:'None', claimId:'—', note:'No claims. Performance test met guarantee figures.', action:'Pre-expiry inspection in Dec while cover is still active.'},
+  {tag:'G-601', equip:'Gas Turbine Generator 1', area:'Utilities', vendor:'Rotating Equipment Co.', po:'PO-44155', handover:'30 Sep 2024', start:'30 Sep 2024', end:'2026-09-30', claim:'Closed', claimId:'W-003', note:'Hot gas path inspection completed under warranty Sep 2026. Claim closed and signed off.', action:'Warranty expired — item moved to maintenance contract.'},
+  {tag:'D-720', equip:'DCS / SIS Control System', area:'Electrical & Controls', vendor:'Electrical & Controls', po:'PO-44620', handover:'01 Nov 2025', start:'01 Nov 2025', end:'2027-11-01', claim:'Open', claimId:'W-013', note:'Intermittent I/O card faults on Train 2 loop. Vendor analysing diagnostics remotely.', action:'Weekly vendor call until root cause confirmed.'},
+  {tag:'P-110A', equip:'Feed Gas Booster Pump A', area:'Gas Treatment', vendor:'Rotating Equipment Co.', po:'PO-44109', handover:'14 Mar 2025', start:'14 Mar 2025', end:'2027-03-14', claim:'Overdue', claimId:'W-008', note:'Repeated coupling misalignment. Two vendor visits, issue returned within a month each time.', action:'Escalate — request vendor engineering study, not another re-alignment.'},
+  {tag:'F-330', equip:'Flare Knock-Out Drum', area:'Utilities', vendor:'Valves & Piping GmbH', po:'PO-44348', handover:'11 Jun 2025', start:'11 Jun 2025', end:'2027-06-11', claim:'Closed', claimId:'W-005', note:'Level instrument fault replaced under warranty Aug 2026.', action:'Closed — no further action.'},
+  {tag:'S-815', equip:'Substation Switchgear — SS-8', area:'Electrical & Controls', vendor:'Electrical & Controls', po:'PO-44633', handover:'01 Nov 2025', start:'01 Nov 2025', end:'2026-12-18', claim:'In progress', claimId:'W-015', note:'Protection relay nuisance trips (3 events). Settings review with vendor in progress.', action:'Complete settings review before 18 Dec expiry; log as claim to protect cover.'},
+  {tag:'K-201', equip:'Propane Compressor — Train 2', area:'Liquefaction — Train 2', vendor:'Process Systems Ltd', po:'PO-44260', handover:'19 Oct 2025', start:'19 Oct 2025', end:'2027-10-19', claim:'Open', claimId:'W-016', note:'Oil consumption above normal. Trending only at this stage, claim opened to protect position.', action:'Share 30-day trend with vendor by 27 Nov.'},
+  {tag:'UPS-09', equip:'UPS System — Control Building', area:'Electrical & Controls', vendor:'Electrical & Controls', po:'PO-44641', handover:'01 Nov 2025', start:'01 Nov 2025', end:'2027-11-01', claim:'Closed', claimId:'W-006', note:'Battery bank replaced under warranty Oct 2026 after capacity test failure.', action:'Closed — retest in 6 months under maintenance.'}
+];
+var CLAIMS = [
+  {id:'W-014', title:'P-204B — Mechanical seal failure', meta:'Rotating Equipment Co. · Storage & Loading · Opened 13 Sep 2026', status:'Overdue', days:68},
+  {id:'W-008', title:'P-110A — Repeated coupling misalignment', meta:'Rotating Equipment Co. · Gas Treatment · Opened 02 Oct 2026', status:'Overdue', days:49},
+  {id:'W-011', title:'K-101 — High vibration, DE bearing', meta:'Rotating Equipment Co. · Liquefaction Train 1 · Opened 21 Oct 2026', status:'Open', days:30},
+  {id:'W-009', title:'E-305 — Heater tube leak (cover ends 28 Nov)', meta:'Process Systems Ltd · Gas Treatment · Opened 28 Oct 2026', status:'In progress', days:23},
+  {id:'W-013', title:'D-720 — Intermittent I/O card faults', meta:'Electrical & Controls · Opened 05 Nov 2026', status:'Open', days:15}
+];
+
+function daysLeft(end){ return Math.round((new Date(end+'T00:00:00') - TODAY)/86400000); }
+function statusOf(item){ var d=daysLeft(item.end); if(d<0) return 'Expired'; if(d<=90) return 'Expiring soon'; return 'Active'; }
+function fmtDate(iso){ return new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+function pillFor(s){ if(s==='Active') return '<span class="pill green">Active</span>'; if(s==='Expiring soon') return '<span class="pill amber">Expiring soon</span>'; if(s==='Expired') return '<span class="pill grey">Expired</span>'; if(s==='Overdue') return '<span class="pill red">Overdue</span>'; if(s==='Open') return '<span class="pill blue">Open</span>'; if(s==='In progress') return '<span class="pill amber">In progress</span>'; if(s==='Closed') return '<span class="pill green">Closed</span>'; return '<span class="pill grey">No claim</span>'; }
+
+// KPIs
+document.getElementById('kTotal').textContent = DATA.length;
+document.getElementById('kSoon').textContent = DATA.filter(function(x){var d=daysLeft(x.end); return d>=0 && d<=90;}).length;
+var allClaims = DATA.filter(function(x){return x.claim!=='None';});
+document.getElementById('kOpen').textContent = DATA.filter(function(x){return x.claim==='Open'||x.claim==='In progress'||x.claim==='Overdue';}).length;
+document.getElementById('kOverdue').textContent = DATA.filter(function(x){return x.claim==='Overdue';}).length;
+document.getElementById('kClosed').textContent = DATA.filter(function(x){return x.claim==='Closed';}).length;
+
+// Area bars
+(function(){
+  var counts={}; DATA.forEach(function(x){ var a=x.area.split(' — ')[0]; counts[a]=(counts[a]||0)+1; });
+  var max=Math.max.apply(null,Object.values(counts));
+  var colors=['','amber','blue','red','navy'];
+  var html='', i=0;
+  Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];}).forEach(function(k){
+    html+='<div class="bar-row"><span class="label">'+k+'</span><div class="track"><div class="fill '+colors[i%colors.length]+'" style="width:'+Math.round(counts[k]/max*100)+'%"></div></div><span class="val">'+counts[k]+'</span></div>'; i++;
+  });
+  document.getElementById('areaBars').innerHTML=html;
+})();
+
+// Timeline: next 5 expiries (future, soonest first)
+(function(){
+  var upcoming=DATA.slice().sort(function(a,b){return daysLeft(a.end)-daysLeft(b.end);}).filter(function(x){return daysLeft(x.end)>=0;}).slice(0,5);
+  document.getElementById('timeline').innerHTML = upcoming.map(function(x){
+    var d=daysLeft(x.end); var cls = d<0?'grey':(d<=30?'red':(d<=90?'amber':'green')); var lbl = d<0?'Expired':(d+' days left');
+    return '<div class="tl-row"><div class="tl-date">'+fmtDate(x.end)+'</div><div class="tl-main"><strong>'+x.tag+' — '+x.equip+'</strong><span>'+x.vendor+' · Claim: '+x.claim+'</span></div><span class="pill '+cls+'">'+lbl+'</span></div>';
+  }).join('');
+})();
+
+// Claims list
+document.getElementById('claimsList').innerHTML = CLAIMS.map(function(c){
+  return '<div class="claim"><div class="claim-num">'+c.id.replace('W-','')+'</div><div class="claim-main"><strong>'+c.id+' · '+c.title+'</strong><p>'+c.meta+'</p></div><div style="text-align:right;flex:none">'+pillFor(c.status)+'<div style="font-size:12.5px;color:var(--muted);margin-top:5px">'+c.days+' days open</div></div></div>';
+}).join('');
+
+// Filters setup
+var areas=[...new Set(DATA.map(function(x){return x.area;}))].sort();
+var vendors=[...new Set(DATA.map(function(x){return x.vendor;}))].sort();
+areas.forEach(function(a){ var o=document.createElement('option'); o.textContent=a; document.getElementById('fArea').appendChild(o); });
+vendors.forEach(function(v){ var o=document.createElement('option'); o.textContent=v; document.getElementById('fVendor').appendChild(o); });
+
+var seg='all';
+function render(){
+  var q=document.getElementById('q').value.toLowerCase().trim();
+  var fa=document.getElementById('fArea').value, fv=document.getElementById('fVendor').value, fs=document.getElementById('fStatus').value;
+  var rows=DATA.filter(function(x){
+    var st=statusOf(x);
+    if(seg==='active' && st!=='Active') return false;
+    if(seg==='expiring' && st!=='Expiring soon') return false;
+    if(seg==='claim' && x.claim==='None') return false;
+    if(fa && x.area!==fa) return false;
+    if(fv && x.vendor!==fv) return false;
+    if(fs && st!==fs) return false;
+    if(q && (x.tag+' '+x.equip+' '+x.vendor+' '+x.area+' '+x.claimId).toLowerCase().indexOf(q)===-1) return false;
+    return true;
+  }).sort(function(a,b){return daysLeft(a.end)-daysLeft(b.end);});
+
+  document.getElementById('tbody').innerHTML = rows.map(function(x){
+    var d=daysLeft(x.end), st=statusOf(x);
+    var dcls = d<0?'':(d<=30?'urgent':(d<=90?'soon':''));
+    var dtxt = d<0 ? Math.abs(d)+'d ago' : d+' days';
+    return '<tr data-tag="'+x.tag+'"><td><span class="tagcode">'+x.tag+'</span></td><td class="equip"><strong>'+x.equip+'</strong><span>'+x.area+'</span></td><td>'+x.vendor+'</td><td style="white-space:nowrap">'+fmtDate(x.end)+'</td><td class="days '+dcls+'">'+dtxt+'</td><td>'+pillFor(st)+'</td><td>'+(x.claim==='None'?'<span style="color:var(--muted)">—</span>':pillFor(x.claim))+'</td></tr>';
+  }).join('');
+
+  document.getElementById('mcards').innerHTML = rows.map(function(x){
+    var d=daysLeft(x.end), st=statusOf(x);
+    return '<article class="mcard" data-tag="'+x.tag+'"><div class="mcard-top"><h3>'+x.tag+' — '+x.equip+'</h3>'+pillFor(st)+'</div><p>'+x.area+' · '+x.vendor+'</p><p>Ends '+fmtDate(x.end)+' · <strong>'+(d<0?'expired '+Math.abs(d)+'d ago':d+' days left')+'</strong></p><div class="mcard-meta">'+(x.claim!=='None'?pillFor(x.claim):'<span class="pill grey">No claim</span>')+'<span class="pill grey">'+x.po+'</span></div></article>';
+  }).join('');
+
+  document.getElementById('empty').hidden = rows.length>0;
+  document.getElementById('countLine').textContent = 'Showing '+rows.length+' of '+DATA.length+' warranties · Sorted by soonest expiry';
+  document.querySelectorAll('[data-tag]').forEach(function(el){ el.addEventListener('click',function(){ openDetail(el.getAttribute('data-tag')); }); });
+}
+['q','fArea','fVendor','fStatus'].forEach(function(id){ document.getElementById(id).addEventListener('input',render); document.getElementById(id).addEventListener('change',render); });
+document.querySelectorAll('.seg button').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.seg button').forEach(function(x){x.classList.remove('active');}); b.classList.add('active'); seg=b.getAttribute('data-seg'); render(); }); });
+render();
+
+// Drawer
+function openDetail(tag){
+  var x=DATA.filter(function(i){return i.tag===tag;})[0]; if(!x) return;
+  var d=daysLeft(x.end), st=statusOf(x);
+  document.getElementById('dArea').textContent=x.area;
+  document.getElementById('dTitle').textContent=x.tag+' — '+x.equip;
+  document.getElementById('dSub').textContent=x.vendor+' · '+x.po;
+  document.getElementById('dList').innerHTML =
+    '<dt>Status</dt><dd>'+st+(d>=0?' · '+d+' days remaining':' · expired '+Math.abs(d)+' days ago')+'</dd>'+
+    '<dt>Handover</dt><dd>'+x.handover+'</dd>'+
+    '<dt>Warranty</dt><dd>'+x.start+' → '+fmtDate(x.end)+'</dd>'+
+    '<dt>Vendor</dt><dd>'+x.vendor+'</dd>'+
+    '<dt>PO / Contract</dt><dd>'+x.po+'</dd>'+
+    '<dt>Claim</dt><dd>'+(x.claim==='None'?'No claim raised':x.claimId+' — '+x.claim)+'</dd>';
+  document.getElementById('dNote').textContent=x.note;
+  document.getElementById('dAction').textContent=x.action;
+  var dr=document.getElementById('drawer'); dr.hidden=false;
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ dr.classList.add('open'); }); });
+  document.getElementById('overlay').classList.add('open');
+}
+function closeDetail(){ var dr=document.getElementById('drawer'); dr.classList.remove('open'); document.getElementById('overlay').classList.remove('open'); setTimeout(function(){ dr.hidden=true; },280); }
+document.getElementById('closeDrawer').addEventListener('click',closeDetail);
+document.getElementById('overlay').addEventListener('click',closeDetail);
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDetail(); });
+</script>
+<footer style="text-align:center;padding:24px 16px;color:#64748b;font-size:13px;font-family:system-ui,sans-serif;">Built by Syed Mohammed Fuaad — Power BI Developer / Data Analyst</footer>
+</body>
+</html>
