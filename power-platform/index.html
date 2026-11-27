@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Syed — Power BI, Power Apps &amp; Power Automate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f7f8f6;
+        --surface:#ffffff;
+        --ink:#1c2420;
+        --ink-soft:#4c5a53;
+        --line:#dde3dd;
+        --green:#14532d;
+        --green-deep:#0d3d21;
+        --green-ink:#eaf5ee;
+        --accent:#b7791f;
+        --chip:#e7efe9;
+        --shadow:0 10px 30px rgba(20,50,35,.10);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#101613;
+          --surface:#1a211d;
+          --ink:#eef3ef;
+          --ink-soft:#a9bab0;
+          --line:#2c3831;
+          --green:#2e7d4f;
+          --green-deep:#123524;
+          --green-ink:#eaf5ee;
+          --accent:#d9a441;
+          --chip:#223028;
+          --shadow:0 10px 30px rgba(0,0,0,.45);
+        }
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{
+        margin:0;background:var(--bg);color:var(--ink);
+        font-family:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+        font-size:16px;line-height:1.55;
+        -webkit-font-smoothing:antialiased;
+      }
+      h1,h2,h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;line-height:1.15;margin:0}
+      a{color:var(--green)}
+      .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+      /* ---------- Intro ---------- */
+      .intro{padding:52px 0 8px}
+      .intro .kicker{
+        display:inline-block;font-size:.8rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+        color:var(--green);background:var(--chip);border:1px solid var(--line);
+        padding:7px 14px;border-radius:999px;margin-bottom:20px;
+      }
+      .intro h1{font-size:clamp(2.1rem,5.4vw,3.4rem);max-width:16em}
+      .intro h1 em{font-style:normal;color:var(--green)}
+      .intro p.lede{font-size:1.13rem;color:var(--ink-soft);max-width:38em;margin:18px 0 0}
+      .intro-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+      .btn{
+        display:inline-flex;align-items:center;gap:8px;min-height:48px;
+        padding:12px 22px;border-radius:10px;font-weight:800;font-size:1rem;text-decoration:none;
+        border:1.5px solid var(--green);transition:background .15s ease,color .15s ease;
+      }
+      .btn-solid{background:var(--green);color:#fff}
+      .btn-solid:hover{background:var(--green-deep)}
+      .btn-ghost{background:transparent;color:var(--green)}
+      .btn-ghost:hover{background:var(--chip)}
+      .facts{
+        display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:30px;padding:16px 0 4px;
+        border-top:1px solid var(--line);color:var(--ink-soft);font-size:.95rem;
+      }
+      .facts strong{color:var(--ink)}
+
+      /* ---------- Sections ---------- */
+      section{padding:44px 0 6px}
+      .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+      .sec-head h2{font-size:clamp(1.6rem,3.6vw,2.2rem)}
+      .sec-sub{color:var(--ink-soft);max-width:44em;margin:6px 0 22px}
+
+      /* ---------- Live client band ---------- */
+      .live-band{
+        background:var(--green-deep);color:var(--green-ink);border-radius:16px;
+        padding:30px 30px 26px;display:grid;grid-template-columns:1.5fr 1fr;gap:28px;align-items:center;
+      }
+      .live-band .tag{
+        display:inline-block;font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+        color:#ffd98a;border:1px solid rgba(255,217,138,.5);padding:6px 12px;border-radius:999px;margin-bottom:14px;
+      }
+      .live-band h3{font-size:1.7rem;color:#fff}
+      .live-band p{color:#cfe4d6;margin:10px 0 0;max-width:32em}
+      .live-band ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+      .live-band li{
+        border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:12px 14px;font-size:.95rem;
+      }
+      .live-band li strong{display:block;color:#fff;font-size:1.02rem}
+      .btn-light{background:#fff;color:var(--green-deep);border-color:#fff;margin-top:20px}
+      .btn-light:hover{background:#e7f2ea}
+
+      /* ---------- Demo grid ---------- */
+      .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+      .card{
+        background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+        display:flex;flex-direction:column;box-shadow:var(--shadow);
+      }
+      .card img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+      .card-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+      .card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+      .card-type{
+        font-size:.74rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+        color:var(--green);background:var(--chip);padding:5px 11px;border-radius:999px;
+      }
+      .card-loc{font-size:.88rem;color:var(--ink-soft)}
+      .card h3{font-size:1.45rem}
+      .card p.desc{color:var(--ink-soft);margin:8px 0 0}
+      .card ul{list-style:none;margin:14px 0 18px;padding:0;display:grid;gap:7px;font-size:.95rem}
+      .card ul li{padding-left:22px;position:relative}
+      .card ul li::before{
+        content:"";position:absolute;left:2px;top:.52em;width:8px;height:8px;border-radius:50%;
+        background:var(--accent);
+      }
+      .card .btn{margin-top:auto;justify-content:center}
+      .demo-note{
+        margin-top:16px;font-size:.9rem;color:var(--ink-soft);
+        border:1px dashed var(--line);border-radius:10px;padding:12px 16px;background:var(--surface);
+      }
+
+      /* ---------- Services ---------- */
+      .services{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+      .svc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px 26px}
+      .svc h3{font-size:1.35rem;margin-bottom:6px}
+      .svc p{color:var(--ink-soft);margin:0 0 14px}
+      .svc ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+      .svc li{padding-left:24px;position:relative}
+      .svc li::before{
+        content:"✓";position:absolute;left:0;top:0;color:var(--green);font-weight:800;
+      }
+
+      /* ---------- Steps ---------- */
+      .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:step}
+      .step{border-top:3px solid var(--green);padding-top:14px}
+      .step .num{
+        font-family:"DM Serif Display",Georgia,serif;font-size:1.9rem;color:var(--accent);display:block;margin-bottom:4px;
+      }
+      .step h3{font-size:1.15rem;font-family:"Nunito Sans",sans-serif;font-weight:800}
+      .step p{color:var(--ink-soft);margin:6px 0 0;font-size:.96rem}
+
+      /* ---------- Contact / footer ---------- */
+      .contact{
+        margin:48px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+        padding:30px;text-align:center;
+      }
+      .contact h2{font-size:clamp(1.5rem,3.4vw,2rem)}
+      .contact p{color:var(--ink-soft);max-width:36em;margin:10px auto 0}
+      .contact .intro-actions{justify-content:center}
+      footer{
+        padding:28px 0 40px;color:var(--ink-soft);font-size:.92rem;text-align:center;
+      }
+      footer a{font-weight:700}
+      footer .sep{margin:0 8px;opacity:.6}
+
+      @media (max-width:760px){
+        .grid,.services,.steps{grid-template-columns:1fr}
+        .live-band{grid-template-columns:1fr;padding:24px 22px}
+        .intro{padding-top:36px}
+        section{padding-top:36px}
+      }
+      @media (prefers-reduced-motion: reduce){
+        html{scroll-behavior:auto}
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+
+      <!-- Intro -->
+      <div class="intro">
+        <span class="kicker">Syed Mohammed Fuaad · Qatar</span>
+        <h1>Power BI, Power Apps &amp; Power Automate for <em>project teams</em></h1>
+        <p class="lede">
+          The Microsoft Power Platform work I do on the North Field East LNG project at Chiyoda
+          Technip JV, Ras Laffan, Qatar — dashboards that replace manual Excel reporting, an app
+          that moved site inspections off paper, and flows that make sure nothing goes overdue
+          unnoticed.
+        </p>
+        <div class="intro-actions">
+          <a class="btn btn-solid" href="#powerbi">See the NFE dashboard</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/syed-fuaad/" target="_blank" rel="noopener">LinkedIn — Syed Fuaad ↗</a>
+        </div>
+        <div class="facts">
+          <span><strong>3</strong> tools — Power BI, Power Apps, Power Automate</span>
+          <span>NFE LNG project, Ras Laffan</span>
+          <span>SHES, vendor &amp; permit-to-work reporting</span>
+          <span>Based in Qatar</span>
+        </div>
+      </div>
+
+      <!-- Power BI dashboards -->
+      <section id="powerbi" aria-labelledby="powerbi-h">
+        <div class="sec-head"><h2 id="powerbi-h">Power BI Dashboards</h2></div>
+        <p class="sec-sub">Live reporting I built for real projects — replacing manual Excel reporting with dashboards that refresh themselves.</p>
+        <div class="live-band">
+          <div>
+            <span class="tag">Interactive demo</span>
+            <h3>NFE Vendor Manning Dashboard</h3>
+            <p>
+              Vendor mobilisation dashboard for the North Field East LNG project (Chiyoda Technip JV,
+              Ras Laffan, Qatar) — manpower KPIs, mobilisation status and man-days by month, with slicers.
+              Built as a Power BI project; try the interactive version here.
+            </p>
+            <a class="btn btn-light" href="https://f4fuaad.github.io/portfolio-demos/power-bi/nfe-manning/" target="_blank" rel="noopener">Try the interactive dashboard ↗</a>
+          </div>
+          <ul>
+            <li><strong>PTW Analytics Dashboard</strong>Permit-to-work reporting, SHES</li>
+            <li><strong>Equipment Inspection Tracker</strong>Inspection status and follow-up</li>
+            <li><strong>Weekly PTW Summary Report</strong>Weekly safety reporting</li>
+          </ul>
+        </div>
+        <p class="sec-sub">The three dashboards above are featured on my LinkedIn profile: <a href="https://www.linkedin.com/in/syed-fuaad/">linkedin.com/in/syed-fuaad</a></p>
+      </section>
+
+      <!-- Power Apps & Power Automate -->
+      <section aria-labelledby="apps-h">
+        <div class="sec-head"><h2 id="apps-h">Power Apps &amp; Power Automate</h2></div>
+        <p class="sec-sub">The same data, working harder — captured where the work happens, and acted on before it goes overdue.</p>
+        <div class="services">
+
+          <div class="svc">
+            <h3>Power Apps — inspections off paper</h3>
+            <p>The first Power Apps canvas app in our SHES department:</p>
+            <ul>
+              <li>Site inspections captured on site, the same day — straight into SharePoint</li>
+              <li>No retyping, no paper chasing the data</li>
+              <li>A Power BI dashboard on top of the same data</li>
+            </ul>
+          </div>
+
+          <div class="svc">
+            <h3>Power Automate — closing the loop</h3>
+            <p>Flows that alert the right people — so a dashboard becomes action, not just a prettier spreadsheet:</p>
+            <ul>
+              <li>Alerts when corrective actions go overdue</li>
+              <li>Alerts on high-risk safety trends</li>
+              <li>90/30-day reminders ahead of deadlines</li>
+              <li>CTCA upsert flow, keeping records current</li>
+            </ul>
+            <p style="margin-top:14px">Alert-to-action went from 48+ hours to under 2 hours.</p>
+          </div>
+
+        </div>
+        <p class="demo-note">
+          Also in the toolkit: star-schema modelling and DAX, Power Query, and row-level security and governance.
+        </p>
+      </section>
+
+      <!-- Contact -->
+      <div class="contact">
+        <h2>Want this standard on your project?</h2>
+        <p>
+          I am a Power BI Developer and Data Analyst based in Ras Laffan, Qatar — open to Power BI
+          and data roles in the GCC and remote. Connect on LinkedIn.
+        </p>
+        <div class="intro-actions">
+          <a class="btn btn-solid" href="https://www.linkedin.com/in/syed-fuaad/" target="_blank" rel="noopener">LinkedIn — Syed Fuaad ↗</a>
+          <a class="btn btn-ghost" href="https://f4fuaad.github.io/portfolio-demos/" target="_blank" rel="noopener">Freelance work — websites &amp; AI receptionist ↗</a>
+        </div>
+      </div>
+
+      <footer>
+        Built by <strong>Syed Mohammed Fuaad</strong> — Power BI Developer &amp; Data Analyst, Qatar
+        <span class="sep">·</span>
+        <a href="https://f4fuaad.github.io/portfolio-demos/" target="_blank" rel="noopener">Freelance work</a>
+        <span class="sep">·</span>
+        <a href="https://www.linkedin.com/in/syed-fuaad/" target="_blank" rel="noopener">LinkedIn</a>
+      </footer>
+
+    </main>
+  </body>
+</html>
